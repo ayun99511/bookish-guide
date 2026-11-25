@@ -1,0 +1,74 @@
+
+# ⏰ TIMEWISE
+### Your Time, Your Success!
+
+Website pengelolaan waktu untuk membantu pelajar mengatur kegiatan sehari-hari agar lebih teratur, disiplin, dan produktif.
+
+## 🌷 Tentang TimeWise
+
+TimeWise merupakan website sederhana yang dirancang sebagai solusi untuk membantu pelajar mengelola waktu antara belajar, sekolah, tugas, dan kegiatan pribadi.
+
+## ✨ Fitur Website
+
+- 🕒 Jam dan tanggal otomatis
+- 📋 Menambahkan kegiatan
+- 📅 Mengatur tanggal dan waktu
+- 🏷️ Memilih kategori kegiatan
+- 🔥 Menentukan prioritas
+- ✏️ Mengedit kegiatan
+- ✅ Menandai kegiatan selesai
+- 🗑️ Menghapus kegiatan
+- 📊 Menghitung progres otomatis
+- 💾 Menyimpan data menggunakan Local Storage
+
+## 🛠️ Teknologi
+
+| Teknologi | Fungsi |
+|---|---|
+| HTML | Struktur halaman |
+| CSS | Desain website |
+| JavaScript | Fungsi dan interaksi |
+| Local Storage | Penyimpanan data |
+
+## 🎯 Tujuan
+
+1. Membantu pelajar mengatur waktu.
+2. Meningkatkan kedisiplinan.
+3. Mengurangi kebiasaan menunda tugas.
+4. Membantu membuat jadwal harian.
+5. Meningkatkan produktivitas.
+
+## 🚀 Cara Menggunakan
+
+1. Buka website TimeWise.
+2. Masukkan nama kegiatan.
+3. Pilih tanggal dan waktu.
+4. Pilih kategori dan prioritas.
+5. Tekan Tambahkan Kegiatan.
+6. Tandai kegiatan setelah selesai.
+7. Lihat perkembangan melalui progress harian.
+
+## 📁 Struktur Repository
+
+```text
+timewise-website/
+├── index.html
+├── style.css
+├── script.js
+└── README.md
+```
+
+## 👩‍💻 Informasi Proyek
+
+- Nama proyek: TimeWise
+- Jenis: Website Pengelolaan Waktu
+- Sasaran: Pelajar
+- Tahun: 2026
+- Platform: GitHub Pages
+
+## 💙 Motto
+
+"Manage Your Time, Achieve Your Dreams!"
+
+---
+© 2026 TimeWise - Student Project
