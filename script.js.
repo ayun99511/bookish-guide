@@ -1,0 +1,309 @@
+
+// Mengambil elemen dari HTML
+const form = document.getElementById("taskForm");
+const taskName = document.getElementById("taskName");
+const taskDate = document.getElementById("taskDate");
+const taskTime = document.getElementById("taskTime");
+const category = document.getElementById("category");
+const priority = document.getElementById("priority");
+const taskList = document.getElementById("taskList");
+
+// Mengambil data dari Local Storage
+let tasks = JSON.parse(localStorage.getItem("timewiseTasks")) || [];
+let activeFilter = "all";
+let editingId = null;
+
+// Menampilkan jam dan tanggal
+function updateClock() {
+  const now = new Date();
+
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString("id-ID", { hour12: false });
+
+  document.getElementById("todayDate").textContent =
+    now.toLocaleDateString("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+// Format tanggal lokal
+function getLocalDate() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+taskDate.min = getLocalDate();
+
+// Menyimpan data
+function saveTasks() {
+  localStorage.setItem("timewiseTasks", JSON.stringify(tasks));
+}
+
+// Menambahkan dan mengedit kegiatan
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const name = taskName.value.trim();
+
+  if (!name) {
+    alert("Nama kegiatan tidak boleh kosong!");
+    return;
+  }
+
+  if (editingId !== null) {
+    tasks = tasks.map(task => {
+      if (task.id === editingId) {
+        return {
+          ...task,
+          name,
+          date: taskDate.value,
+          time: taskTime.value,
+          category: category.value,
+          priority: priority.value
+        };
+      }
+      return task;
+    });
+
+    editingId = null;
+  } else {
+    tasks.push({
+      id: Date.now().toString() + Math.random(),
+      name,
+      date: taskDate.value,
+      time: taskTime.value,
+      category: category.value,
+      priority: priority.value,
+      completed: false
+    });
+  }
+
+  saveTasks();
+  form.reset();
+  taskDate.min = getLocalDate();
+
+  document.querySelector(".primary-btn").textContent =
+    "+ Tambahkan Kegiatan";
+
+  renderTasks();
+});
+
+// Format tanggal untuk tampilan
+function formatDate(date) {
+  const [year, month, day] = date.split("-");
+
+  return new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day)
+  ).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+// Membuat elemen tombol
+function createButton(text, className, action) {
+  const button = document.createElement("button");
+  button.textContent = text;
+  button.className = className;
+  button.addEventListener("click", action);
+  return button;
+}
+
+// Menampilkan semua kegiatan
+function renderTasks() {
+  taskList.replaceChildren();
+
+  let filtered = tasks.filter(task => {
+    if (activeFilter === "done") return task.completed;
+    if (activeFilter === "pending") return !task.completed;
+    return true;
+  });
+
+  filtered.sort((a, b) =>
+    (a.date + a.time).localeCompare(b.date + b.time)
+  );
+
+  if (filtered.length === 0) {
+    const message = document.createElement("p");
+    message.className = "empty";
+    message.textContent =
+      "Belum ada kegiatan di sini. Yuk, tambahkan kegiatanmu!";
+    taskList.appendChild(message);
+  }
+
+  filtered.forEach(task => {
+    const item = document.createElement("article");
+    item.className = "task-item";
+
+    if (task.completed) {
+      item.classList.add("completed");
+    }
+
+    const info = document.createElement("div");
+    info.className = "task-info";
+
+    const title = document.createElement("h3");
+    title.textContent = task.name;
+
+    const details = document.createElement("p");
+    details.textContent =
+      `📅 ${formatDate(task.date)} | 🕒 ${task.time}`;
+
+    const categoryTag = document.createElement("span");
+    categoryTag.className = "tag";
+    categoryTag.textContent = task.category;
+
+    const priorityTag = document.createElement("span");
+    priorityTag.className = `tag priority ${task.priority}`;
+    priorityTag.textContent = `Prioritas ${task.priority}`;
+
+    info.append(title, details, categoryTag, priorityTag);
+
+    const actions = document.createElement("div");
+    actions.className = "task-actions";
+
+    const completeBtn = createButton(
+      task.completed ? "↩" : "✓",
+      "complete-btn",
+      () => toggleTask(task.id)
+    );
+
+    completeBtn.title = "Ubah status kegiatan";
+
+    const editBtn = createButton(
+      "✏️",
+      "edit-btn",
+      () => editTask(task.id)
+    );
+
+    editBtn.title = "Edit kegiatan";
+
+    const deleteBtn = createButton(
+      "🗑",
+      "delete-btn",
+      () => deleteTask(task.id)
+    );
+
+    deleteBtn.title = "Hapus kegiatan";
+
+    actions.append(completeBtn, editBtn, deleteBtn);
+    item.append(info, actions);
+    taskList.appendChild(item);
+  });
+
+  updateStats();
+}
+
+// Menandai kegiatan selesai
+function toggleTask(id) {
+  tasks = tasks.map(task =>
+    task.id === id
+      ? { ...task, completed: !task.completed }
+      : task
+  );
+
+  saveTasks();
+  renderTasks();
+}
+
+// Mengedit kegiatan
+function editTask(id) {
+  const task = tasks.find(task => task.id === id);
+
+  if (!task) return;
+
+  taskName.value = task.name;
+  taskDate.value = task.date;
+  taskTime.value = task.time;
+  category.value = task.category;
+  priority.value = task.priority;
+
+  editingId = id;
+
+  document.querySelector(".primary-btn").textContent =
+    "Simpan Perubahan";
+
+  document.getElementById("taskForm").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+// Menghapus kegiatan
+function deleteTask(id) {
+  if (!confirm("Yakin ingin menghapus kegiatan ini?")) {
+    return;
+  }
+
+  tasks = tasks.filter(task => task.id !== id);
+
+  if (editingId === id) {
+    editingId = null;
+    form.reset();
+    document.querySelector(".primary-btn").textContent =
+      "+ Tambahkan Kegiatan";
+  }
+
+  saveTasks();
+  renderTasks();
+}
+
+// Menghitung statistik
+function updateStats() {
+  const total = tasks.length;
+  const done = tasks.filter(task => task.completed).length;
+  const pending = total - done;
+
+  const percentage = total === 0
+    ? 0
+    : Math.round((done / total) * 100);
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("done").textContent = done;
+  document.getElementById("pending").textContent = pending;
+
+  document.getElementById("percentage").textContent =
+    percentage + "%";
+
+  document.getElementById("progressBar").style.width =
+    percentage + "%";
+
+  let message = "Ayo mulai kegiatan pertamamu!";
+
+  if (percentage === 100 && total > 0) {
+    message = "Hebat! Semua kegiatan sudah selesai! 🎉";
+  } else if (percentage > 0) {
+    message = "Bagus! Terus tingkatkan produktivitasmu!";
+  }
+
+  document.getElementById("progressMessage").textContent = message;
+}
+
+// Filter kegiatan
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click", function() {
+    document.querySelectorAll(".filter").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    this.classList.add("active");
+    activeFilter = this.dataset.filter;
+
+    renderTasks();
+  });
+});
+
+// Menampilkan data saat website dibuka
+renderTasks();
