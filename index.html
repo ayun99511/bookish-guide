@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TimeWise membantu pelajar mengatur jadwal dan mengelola waktu.">
+  <title>TimeWise | Smart Time Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <a class="brand" href="#">⏰ TimeWise</a>
+  <span class="header-label">Smart Time Management</span>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">WELCOME TO TIMEWISE</span>
+      <h1>Waktumu Berharga,<br><span>Manfaatkan Sebaiknya!</span></h1>
+      <p>Atur kegiatanmu hari ini dan jadilah lebih produktif setiap hari.</p>
+    </div>
+    <div class="clock-box">
+      <div id="clock">00:00:00</div>
+      <p id="todayDate">Memuat tanggal...</p>
+    </div>
+  </section>
+
+  <section class="stats">
+    <article class="stat">
+      <span>📋</span>
+      <p>Total Kegiatan</p>
+      <h2 id="total">0</h2>
+    </article>
+    <article class="stat">
+      <span>✅</span>
+      <p>Selesai</p>
+      <h2 id="done">0</h2>
+    </article>
+    <article class="stat">
+      <span>⏳</span>
+      <p>Belum Selesai</p>
+      <h2 id="pending">0</h2>
+    </article>
+  </section>
+
+  <section class="panel progress-panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Progress Harian</h2>
+        <p>Perhatikan perkembangan kegiatanmu.</p>
+      </div>
+      <strong id="percentage">0%</strong>
+    </div>
+    <div class="progress-track">
+      <div id="progressBar"></div>
+    </div>
+    <p class="progress-note" id="progressMessage">
+      Ayo mulai kegiatan pertamamu!
+    </p>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Tambah Kegiatan</h2>
+        <p>Rencanakan kegiatanmu dengan baik.</p>
+      </div>
+      <span class="heading-icon">✏️</span>
+    </div>
+
+    <form id="taskForm">
+      <label for="taskName">Nama kegiatan</label>
+      <input id="taskName" type="text"
+        placeholder="Contoh: Belajar Matematika" required>
+
+      <div class="form-grid">
+        <div>
+          <label for="taskDate">Tanggal</label>
+          <input id="taskDate" type="date" required>
+        </div>
+        <div>
+          <label for="taskTime">Waktu</label>
+          <input id="taskTime" type="time" required>
+        </div>
+      </div>
+
+      <label for="category">Kategori</label>
+      <select id="category">
+        <option>Belajar</option>
+        <option>Sekolah</option>
+        <option>Pribadi</option>
+        <option>Organisasi</option>
+        <option>Lainnya</option>
+      </select>
+
+      <label for="priority">Prioritas</label>
+      <select id="priority">
+        <option value="Tinggi">Tinggi</option>
+        <option value="Sedang" selected>Sedang</option>
+        <option value="Rendah">Rendah</option>
+      </select>
+
+      <button class="primary-btn" type="submit">
+        + Tambahkan Kegiatan
+      </button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Jadwal Kegiatanku</h2>
+        <p>Daftar semua rencana kegiatanmu.</p>
+      </div>
+      <span class="heading-icon">📅</span>
+    </div>
+
+    <div class="filters">
+      <button class="filter active" data-filter="all">Semua</button>
+      <button class="filter" data-filter="pending">Belum Selesai</button>
+      <button class="filter" data-filter="done">Selesai</button>
+    </div>
+
+    <div id="taskList">
+      <p class="empty">Belum ada kegiatan. Yuk, buat jadwal pertamamu!</p>
+    </div>
+  </section>
+
+  <section class="motivation">
+    <span>🌷</span>
+    <div>
+      <h3>Daily Motivation</h3>
+      <p>"Kesuksesan dimulai dari kemampuan menghargai waktu."</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>TIMEWISE</strong>
+  <p>Manage Your Time, Achieve Your Dreams.</p>
+  <p>© 2026 TimeWise | Student Project</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
